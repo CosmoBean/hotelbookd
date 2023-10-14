@@ -1,0 +1,44 @@
+# Binary output
+/bin/
+
+# Go-specific
+*.a
+*.o
+*.so
+*.ko
+*.cgo*
+_testmain.go
+*.exe
+*.test
+*.prof
+
+# Dependency directories
+vendor/
+Gopkg.lock
+Gopkg.toml
+
+
+# Folders
+_obj
+_test
+
+# Architecture specific extensions/prefixes
+*.[568vq]
+[568vq].out
+
+*.cgo1.go
+*.cgo2.c
+_cgo_defun.c
+_cgo_gotypes.go
+_cgo_export.*
+
+
+# IDE/Editor directories
+.idea/
+*.swp
+*.swo
+*.swn
+
+# macOS
+.DS_Store
+
