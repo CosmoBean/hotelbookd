@@ -13,6 +13,6 @@ func main() {
 		log.Panic("error Loading the env file: ", err)
 	}
 
-	server.Init()
+	server.Init() //default port :8080
 
 }
