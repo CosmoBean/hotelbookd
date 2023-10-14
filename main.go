@@ -1,7 +1,10 @@
 package main
 
-import "fmt"
+import (
+	"github.com/CosmoBean/hotelbookd/server"
+)
 
 func main() {
-	fmt.Println("hotelbookd : project init")
+	server.Init()
+
 }
