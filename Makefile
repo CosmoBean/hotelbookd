@@ -1,4 +1,4 @@
-.PHONY: run, build, run-build, test
+.PHONY: run, build, run-build, test, docker-compose
 
 run-server:
 	@echo "running the program..."
@@ -15,3 +15,7 @@ run: build
 test:
 	@echo "running all the tests..."
 	@go test -v ./...
+
+docker-compose:
+	@echo "booting up the dependent services..."
+	@docker-compose -f docker-compose.yml up -d --remove-orphans
