@@ -3,11 +3,12 @@ version: '3.8'
 services:
   mongo:
     image: mongo:7.0.2
+    container_name: "hotelbookd-mongo"
     environment:
-      MONGO_INITDB_ROOT_USERNAME: ${MONGO_DB_ROOT_USERNAME}
-      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_DB_ROOT_PASSWORD}
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_DB_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_DB_PASSWORD}
     ports:
-      - "27017:27017"
+      - "${MONGO_PORT}:27017"
     volumes:
       - hotelbookd-mongo:/data/db
 
