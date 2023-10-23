@@ -1,6 +1,7 @@
 package server
 
 import (
+	"github.com/CosmoBean/hotelbookd/db"
 	"github.com/CosmoBean/hotelbookd/handler"
 	"github.com/CosmoBean/hotelbookd/utils"
 	"github.com/gofiber/fiber/v2"
@@ -15,8 +16,9 @@ func Init() {
 	// api routes
 	apiV1 := api.Group("/api/v1")
 
-	apiV1.Get("/users", handler.GetUsers)
-	apiV1.Get("/user/:id", handler.GetUser)
+	userHandler := handler.NewUserHandler(db.NewMongoUserStore(db.Get()))
+	apiV1.Get("/users", userHandler.GetUsers)
+	apiV1.Get("/users/:id", userHandler.GetUser)
 
 	err := api.Listen(listenAddr)
 	if err != nil {

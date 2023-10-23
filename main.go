@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/CosmoBean/hotelbookd/db"
 	"github.com/CosmoBean/hotelbookd/server"
 	"github.com/joho/godotenv"
 	"log"
@@ -14,5 +15,6 @@ func main() {
 	}
 
 	server.Init() //default port :8080
+	db.Get()      //Init DBInstance
 
 }
