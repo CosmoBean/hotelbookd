@@ -11,17 +11,17 @@ import (
 )
 
 var (
-	DBInstance     *mongo.Client
-	once           sync.Once
-	mongoUsername  = utils.GetEnvDefault("MONGO_USERNAME", "username")
-	mongoPassword  = utils.GetEnvDefault("MONGO_PASSWORD", "password")
+	DBInstance *mongo.Client
+	once       sync.Once
+	//mongoUsername  = utils.GetEnvDefault("MONGO_USERNAME", "username")
+	//mongoPassword  = utils.GetEnvDefault("MONGO_PASSWORD", "password")
 	mongoHost      = utils.GetEnvDefault("MONGO_HOST", "localhost")
 	mongoPort      = utils.GetEnvDefault("MONGO_PORT", "27017")
 	mongoDBName    = utils.GetEnvDefault("MONGO_DBNAME", "hotel-reservation")
 	userColelction = utils.GetEnvDefault("MONGO_USER_COLLECTION", "users")
 )
 
-var dbUri = fmt.Sprintf("mongodb://%s:%s@%s:%s/%s", mongoUsername, mongoPassword, mongoHost, mongoPort, mongoDBName)
+var dbUri = fmt.Sprintf("mongodb://%s:%s/%s", mongoHost, mongoPort, mongoDBName)
 
 func getInstance() *mongo.Client {
 	once.Do(func() {
