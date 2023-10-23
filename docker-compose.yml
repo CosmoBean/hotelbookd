@@ -4,6 +4,9 @@ services:
   mongo:
     image: mongo:7.0.2
     container_name: "hotelbookd-mongo"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD}
     ports:
       - "${MONGO_PORT}:27017"
     volumes:

@@ -6,7 +6,7 @@ start-basic-containers:
 
 stop-basic-containers:
 	@echo "shutting down the basic containers..."
-	@docker-compose -f docker-compose.yml down --remove-orphans
+	@docker-compose -f docker-compose.yml down -v --remove-orphans
 
 run-server:
 	@echo "running the program..."
