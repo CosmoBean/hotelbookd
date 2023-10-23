@@ -8,9 +8,16 @@ import (
 	"log"
 )
 
+var errorConfig = fiber.Config{
+	// Override default error handler
+	ErrorHandler: func(ctx *fiber.Ctx, err error) error {
+		return ctx.JSON(map[string]string{"error": err.Error()})
+	},
+}
+
 func Init() {
 	listenAddr := utils.GetEnvDefault("API_PORT", ":8080")
-	api := fiber.New()
+	api := fiber.New(errorConfig)
 	api.Get("/health", handler.HealthCheck)
 
 	// api routes
