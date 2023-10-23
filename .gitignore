@@ -42,3 +42,6 @@ _cgo_export.*
 # macOS
 .DS_Store
 
+#env
+.env
+
