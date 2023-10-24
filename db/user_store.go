@@ -10,6 +10,8 @@ import (
 
 type UserStore interface {
 	GetUserByID(context.Context, string) (*models.User, error)
+	GetUsers(context.Context) ([]*models.User, error)
+	InsertUser(context.Context, *models.User) (*models.User, error)
 }
 
 type MongoUserStore struct {
@@ -35,4 +37,25 @@ func (s *MongoUserStore) GetUserByID(ctx context.Context, id string) (*models.Us
 		return nil, err
 	}
 	return &user, nil
+}
+
+func (s *MongoUserStore) GetUsers(ctx context.Context) ([]*models.User, error) {
+	cur, err := s.userCollection.Find(ctx, bson.M{})
+	if err != nil {
+		return nil, err
+	}
+	var users []*models.User
+	if err := cur.All(ctx, &users); err != nil {
+		return nil, err
+	}
+	return users, nil
+}
+
+func (s *MongoUserStore) InsertUser(ctx context.Context, user *models.User) (*models.User, error) {
+	res, err := s.userCollection.InsertOne(ctx, user)
+	if err != nil {
+		return nil, err
+	}
+	user.Id = res.InsertedID.(primitive.ObjectID)
+	return user, nil
 }

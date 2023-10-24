@@ -26,6 +26,7 @@ func Init() {
 	userHandler := handler.NewUserHandler(db.NewMongoUserStore(db.Get()))
 	apiV1.Get("/users", userHandler.GetUsers)
 	apiV1.Get("/users/:id", userHandler.GetUser)
+	apiV1.Post("/users", userHandler.CreateNewUser)
 
 	err := api.Listen(listenAddr)
 	if err != nil {
