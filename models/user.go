@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"golang.org/x/crypto/bcrypt"
+	"net/mail"
 	"regexp"
 )
 
@@ -38,8 +39,9 @@ func (params *CreateUserRequest) Validate() error {
 	if len(params.Password) < minPasswordLen {
 		return fmt.Errorf("password length should be at least %d charecter", minPasswordLen)
 	}
-	if !isValidEmail(params.Email) {
-		return fmt.Errorf("invalid user email")
+	//standard secure way to check validity of email
+	if _, err := mail.ParseAddress(params.Email); err != nil {
+		return err
 	}
 	return nil
 }
