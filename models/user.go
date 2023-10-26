@@ -2,6 +2,7 @@ package models
 
 import (
 	"fmt"
+	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"golang.org/x/crypto/bcrypt"
 	"net/mail"
@@ -27,6 +28,22 @@ type CreateUserRequest struct {
 	LastName  string `json:"lastName"`
 	Email     string `json:"email"`
 	Password  string `json:"password"`
+}
+
+type UpdateUserRequest struct {
+	FirstName string `json:"firstName" bson:"firstName"`
+	LastName  string `json:"lastName" bson:"lastName"`
+}
+
+func (req *UpdateUserRequest) ToBson() bson.M {
+	m := bson.M{}
+	if len(req.FirstName) > minFirstNameLen {
+		m["firstName"] = req.FirstName
+	}
+	if len(req.LastName) > minLastNameLen {
+		m["lastName"] = req.LastName
+	}
+	return m
 }
 
 func (params *CreateUserRequest) Validate() error {

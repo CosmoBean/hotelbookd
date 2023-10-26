@@ -27,6 +27,8 @@ func Init() {
 	apiV1.Get("/users", userHandler.GetUsers)
 	apiV1.Get("/users/:id", userHandler.GetUser)
 	apiV1.Post("/users", userHandler.CreateNewUser)
+	apiV1.Delete("/users/:id", userHandler.DeleteUser)
+	apiV1.Put("/users/:id", userHandler.UpdateUser)
 
 	err := api.Listen(listenAddr)
 	if err != nil {

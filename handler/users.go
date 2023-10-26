@@ -55,3 +55,25 @@ func (h *UserHandler) CreateNewUser(ctx *fiber.Ctx) error {
 
 	return ctx.JSON(InsertedUser)
 }
+
+func (h *UserHandler) UpdateUser(ctx *fiber.Ctx) error {
+	id := ctx.Params("id")
+	var updateUserReq models.UpdateUserRequest
+	if err := ctx.BodyParser(&updateUserReq); err != nil {
+		return err
+	}
+
+	err := h.userStore.UpdateUser(ctx.Context(), id, updateUserReq)
+	if err != nil {
+		return err
+	}
+	return ctx.JSON(map[string]string{"updated": id})
+}
+
+func (h *UserHandler) DeleteUser(ctx *fiber.Ctx) error {
+	id := ctx.Params("id")
+	if err := h.userStore.DeleteUser(ctx.Context(), id); err != nil {
+		return err
+	}
+	return ctx.Status(fiber.StatusNoContent).Send(nil)
+}
