@@ -63,11 +63,11 @@ func (h *UserHandler) UpdateUser(ctx *fiber.Ctx) error {
 		return err
 	}
 
-	err := h.userStore.UpdateUser(ctx.Context(), id, updateUserReq)
+	updatedUser, err := h.userStore.UpdateUser(ctx.Context(), id, updateUserReq)
 	if err != nil {
 		return err
 	}
-	return ctx.JSON(map[string]string{"updated": id})
+	return ctx.JSON(updatedUser)
 }
 
 func (h *UserHandler) DeleteUser(ctx *fiber.Ctx) error {

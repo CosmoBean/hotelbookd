@@ -6,6 +6,7 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 type UserStore interface {
@@ -13,7 +14,7 @@ type UserStore interface {
 	GetUsers(context.Context) ([]*models.User, error)
 	InsertUser(context.Context, *models.User) (*models.User, error)
 	DeleteUser(context.Context, string) error
-	UpdateUser(context.Context, string, models.UpdateUserRequest) error
+	UpdateUser(context.Context, string, models.UpdateUserRequest) (*models.User, error)
 }
 
 type MongoUserStore struct {
@@ -73,14 +74,21 @@ func (s *MongoUserStore) DeleteUser(ctx context.Context, id string) error {
 	return nil
 }
 
-func (s *MongoUserStore) UpdateUser(ctx context.Context, id string, request models.UpdateUserRequest) error {
+func (s *MongoUserStore) UpdateUser(ctx context.Context, id string, request models.UpdateUserRequest) (*models.User, error) {
 	oid, err := primitive.ObjectIDFromHex(id)
 	if err != nil {
-		return err
+		return nil, err
 	}
-	_, err = s.userCollection.UpdateByID(ctx, oid, bson.M{"$set": request.ToBson()})
-	if err != nil {
-		return err
+
+	res := s.userCollection.FindOneAndUpdate(ctx, bson.M{"_id": oid}, bson.M{"$set": request.ToBson()}, options.FindOneAndUpdate().SetReturnDocument(options.After))
+	if res.Err() != nil {
+		return nil, res.Err()
 	}
-	return nil
+
+	updatedUser := models.User{}
+	if err := res.Decode(&updatedUser); err != nil {
+		return nil, err
+	}
+
+	return &updatedUser, nil
 }
