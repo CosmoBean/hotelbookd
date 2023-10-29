@@ -21,6 +21,9 @@ func (h *UserHandler) GetUsers(ctx *fiber.Ctx) error {
 	if err != nil {
 		return err
 	}
+	if users == nil {
+		return ctx.JSON([]map[string]string{}) //empty array
+	}
 	return ctx.JSON(users)
 }
 

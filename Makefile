@@ -17,7 +17,7 @@ build:
 	@go build -o bin/api
 
 run: build
-	@echo "building and executing the binary..."
+	@echo "executing the binary..."
 	@./bin/api
 
 test:

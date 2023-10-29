@@ -16,6 +16,8 @@ This document provides an overview of the available Makefile commands and how to
 
 4. **Environment Variables:** Create a `.env` file in the root directory. Copy the contents from `.env.sample` and replace the placeholder values with your actual configurations.
 
+5. **Chocolatey** [Optional | Windows User] install chocolatey on windows. Install make to use makefile  `choco install make`
+
 ## Available Commands
 
 ### `start-basic-containers`
