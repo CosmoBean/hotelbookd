@@ -3,6 +3,7 @@ package db
 import (
 	"context"
 	"github.com/CosmoBean/hotelbookd/models"
+	"github.com/CosmoBean/hotelbookd/utils"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -22,8 +23,9 @@ type MongoUserStore struct {
 }
 
 func NewMongoUserStore(db *mongo.Database) *MongoUserStore {
+	var userCollection = utils.GetEnvDefault("MONGO_USER_COLLECTION", "users")
 	return &MongoUserStore{
-		userCollection: db.Collection(UserColelction),
+		userCollection: db.Collection(userCollection),
 	}
 }
 
