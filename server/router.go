@@ -23,7 +23,7 @@ func Init() {
 	// api routes
 	apiV1 := api.Group("/api/v1")
 
-	userHandler := handler.NewUserHandler(db.NewMongoUserStore(db.Get()))
+	userHandler := handler.NewUserHandler(db.NewMongoUserStore(db.GetMongoClient(), utils.GetEnvDefault("MONGO_DBNAME", "hotel-reservation")))
 	apiV1.Get("/users", userHandler.GetUsers)
 	apiV1.Get("/users/:id", userHandler.GetUser)
 	apiV1.Post("/users", userHandler.CreateNewUser)

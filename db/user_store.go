@@ -2,6 +2,7 @@ package db
 
 import (
 	"context"
+	"fmt"
 	"github.com/CosmoBean/hotelbookd/models"
 	"github.com/CosmoBean/hotelbookd/utils"
 	"go.mongodb.org/mongo-driver/bson"
@@ -10,7 +11,13 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
+type Dropper interface {
+	Drop(context.Context) error
+}
+
 type UserStore interface {
+	Dropper
+
 	GetUserByID(context.Context, string) (*models.User, error)
 	GetUsers(context.Context) ([]*models.User, error)
 	InsertUser(context.Context, *models.User) (*models.User, error)
@@ -22,11 +29,16 @@ type MongoUserStore struct {
 	userCollection *mongo.Collection
 }
 
-func NewMongoUserStore(db *mongo.Database) *MongoUserStore {
-	var userCollection = utils.GetEnvDefault("MONGO_USER_COLLECTION", "users")
+func NewMongoUserStore(db *mongo.Client, database string) *MongoUserStore {
+	userCollection := utils.GetEnvDefault("MONGO_USER_COLLECTION", "users")
 	return &MongoUserStore{
-		userCollection: db.Collection(userCollection),
+		userCollection: db.Database(database).Collection(userCollection),
 	}
+}
+
+func (s *MongoUserStore) Drop(ctx context.Context) error {
+	fmt.Println("--- dropping the user collection ---")
+	return s.userCollection.Drop(ctx)
 }
 
 func (s *MongoUserStore) GetUserByID(ctx context.Context, id string) (*models.User, error) {

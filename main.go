@@ -14,7 +14,7 @@ func main() {
 		log.Panic("error Loading the env file: ", err)
 	}
 
-	server.Init() //default port :8080
-	db.Get()      //Init DBInstance
+	server.Init()       //default port :8080
+	db.GetMongoClient() //Init DBInstance
 
 }
