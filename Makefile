@@ -1,4 +1,4 @@
-.PHONY: run, build, run-build, test, start-basic-containers, stop-basic-containers, clear-cache
+.PHONY: run, build, run-build, test, start-basic-containers, stop-basic-containers, clear-cache, seed
 
 start-basic-containers:
 	@echo "booting up the basic containers..."
@@ -28,3 +28,6 @@ clear-cache:
 	@echo "clearing the cached test results.."
 	@go clean -testcache
 
+seed:
+	@echo "running seed script...."
+	@go run scripts/seed.go

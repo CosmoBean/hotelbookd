@@ -2,11 +2,12 @@ package models
 
 import (
 	"fmt"
+	"net/mail"
+	"regexp"
+
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"golang.org/x/crypto/bcrypt"
-	"net/mail"
-	"regexp"
 )
 
 const (
@@ -16,7 +17,7 @@ const (
 )
 
 type User struct {
-	Id            primitive.ObjectID `bson:"_id,omitempty" json:"id,omitempty"` //bson:omitempty will auto create id in mongo
+	Id            primitive.ObjectID `bson:"_id,omitempty" json:"id"` //bson:omitempty will auto create id in mongo
 	FirstName     string             `bson:"firstName" json:"firstName"`
 	LastName      string             `bson:"lastName" json:"lastName"`
 	Email         string             `bson:"email" json:"email"`
