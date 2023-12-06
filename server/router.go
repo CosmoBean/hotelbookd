@@ -1,11 +1,12 @@
 package server
 
 import (
+	"log"
+
 	"github.com/CosmoBean/hotelbookd/db"
 	"github.com/CosmoBean/hotelbookd/handler"
 	"github.com/CosmoBean/hotelbookd/utils"
 	"github.com/gofiber/fiber/v2"
-	"log"
 )
 
 var errorConfig = fiber.Config{
@@ -20,15 +21,24 @@ func Init() {
 	api := fiber.New(errorConfig)
 	api.Get("/health", handler.HealthCheck)
 
+	//DB Variables
+	dbName := utils.GetEnvDefault("MONGO_DBNAME", "hotel-reservation")
+	mongoClient := db.GetMongoClient()
+
 	// api routes
 	apiV1 := api.Group("/api/v1")
 
-	userHandler := handler.NewUserHandler(db.NewMongoUserStore(db.GetMongoClient(), utils.GetEnvDefault("MONGO_DBNAME", "hotel-reservation")))
+	//handlers
+	userHandler := handler.NewUserHandler(db.NewMongoUserStore(mongoClient, dbName))
+	hotelHandler := handler.NewHotelHandler(db.NewMongoHotelStore(mongoClient, dbName), db.NewMongoRoomStore(mongoClient, dbName))
+
+	//usersAPI
 	apiV1.Get("/users", userHandler.GetUsers)
 	apiV1.Get("/users/:id", userHandler.GetUser)
 	apiV1.Post("/users", userHandler.CreateNewUser)
 	apiV1.Delete("/users/:id", userHandler.DeleteUser)
 	apiV1.Put("/users/:id", userHandler.UpdateUser)
+	apiV1.Get("/hotels", hotelHandler.HandleGetHotels)
 
 	err := api.Listen(listenAddr)
 	if err != nil {
