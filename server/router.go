@@ -38,7 +38,10 @@ func Init() {
 	apiV1.Post("/users", userHandler.CreateNewUser)
 	apiV1.Delete("/users/:id", userHandler.DeleteUser)
 	apiV1.Put("/users/:id", userHandler.UpdateUser)
+
+	//hotelAPI
 	apiV1.Get("/hotels", hotelHandler.HandleGetHotels)
+	apiV1.Get("/hotels/:id/rooms", hotelHandler.HandleGetHotelRooms)
 
 	err := api.Listen(listenAddr)
 	if err != nil {

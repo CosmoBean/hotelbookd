@@ -5,12 +5,14 @@ import (
 
 	"github.com/CosmoBean/hotelbookd/models"
 	"github.com/CosmoBean/hotelbookd/utils"
+	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
 type RoomStore interface {
 	InsertRoom(context.Context, *models.Room) (*models.Room, error)
+	GetRooms(context.Context, bson.M) ([]*models.Room, error)
 }
 
 type MongoRoomStore struct {
@@ -39,4 +41,16 @@ func (r *MongoRoomStore) InsertRoom(ctx context.Context, room *models.Room) (*mo
 		return nil, err
 	}
 	return room, nil
+}
+
+func (r *MongoRoomStore) GetRooms(ctx context.Context, filter bson.M) ([]*models.Room, error) {
+	resp, err := r.roomCollection.Find(ctx, filter)
+	if err != nil {
+		return nil, err
+	}
+	var rooms []*models.Room
+	if err := resp.All(ctx, &rooms); err != nil {
+		return nil, err
+	}
+	return rooms, nil
 }

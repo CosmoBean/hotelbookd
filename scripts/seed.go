@@ -19,11 +19,12 @@ var (
 	ctx        = context.Background()
 )
 
-func seedHotel(hotelName, hotelLocation string) {
+func seedHotel(hotelName, hotelLocation string, rating float32) {
 	hotel := models.Hotel{
 		Name:     hotelName,
 		Location: hotelLocation,
 		Rooms:    []primitive.ObjectID{},
+		Rating:   rating,
 	}
 	rooms := []models.Room{
 		{
@@ -70,7 +71,7 @@ func init() {
 }
 
 func main() {
-	seedHotel("Bellucia", "France")
-	seedHotel("the Cozy Hotel", "Netherlands")
-	seedHotel("OYO", "India")
+	seedHotel("Bellucia", "France", 3.0)
+	seedHotel("the Cozy Hotel", "Netherlands", 4.0)
+	seedHotel("OYO", "India", 2.5)
 }
