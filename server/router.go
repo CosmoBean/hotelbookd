@@ -24,13 +24,21 @@ func Init() {
 	//DB Variables
 	dbName := utils.GetEnvDefault("MONGO_DBNAME", "hotel-reservation")
 	mongoClient := db.GetMongoClient()
+	userStore := db.NewMongoUserStore(mongoClient, dbName)
+	hotelStore := db.NewMongoHotelStore(mongoClient, dbName)
+	roomStore := db.NewMongoRoomStore(mongoClient, dbName)
+	store := &db.Store{
+		User:  userStore,
+		Hotel: hotelStore,
+		Room:  roomStore,
+	}
 
 	// api routes
 	apiV1 := api.Group("/api/v1")
 
 	//handlers
-	userHandler := handler.NewUserHandler(db.NewMongoUserStore(mongoClient, dbName))
-	hotelHandler := handler.NewHotelHandler(db.NewMongoHotelStore(mongoClient, dbName), db.NewMongoRoomStore(mongoClient, dbName))
+	userHandler := handler.NewUserHandler(store.User)
+	hotelHandler := handler.NewHotelHandler(store)
 
 	//usersAPI
 	apiV1.Get("/users", userHandler.GetUsers)

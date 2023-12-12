@@ -11,10 +11,16 @@ import (
 )
 
 var (
-	DBClient *mongo.Client
-	err      error
-	once     sync.Once
+	MongoClient *mongo.Client
+	err         error
+	once        sync.Once
 )
+
+type Store struct {
+	User  UserStore
+	Hotel HotelStore
+	Room  RoomStore
+}
 
 func getClient() *mongo.Client {
 	once.Do(func() {
@@ -23,12 +29,12 @@ func getClient() *mongo.Client {
 			mongoPort = utils.GetEnvDefault("MONGO_PORT", "27017")
 		)
 		var dbUri = fmt.Sprintf("mongodb://%s:%s", mongoHost, mongoPort)
-		DBClient, err = mongo.Connect(context.TODO(), options.Client().ApplyURI(dbUri))
+		MongoClient, err = mongo.Connect(context.TODO(), options.Client().ApplyURI(dbUri))
 		if err != nil {
 			log.Panic("error while connecting to the database ", err)
 		}
 	})
-	return DBClient
+	return MongoClient
 }
 
 func GetMongoClient() *mongo.Client {
