@@ -59,7 +59,8 @@ func (h *MongoHotelStore) GetHotels(ctx context.Context, filter bson.M) ([]*mode
 
 func (h *MongoHotelStore) GetHotelById(ctx context.Context, id primitive.ObjectID) (*models.Hotel, error) {
 	var hotel *models.Hotel
-	resp := h.hotelCollection.FindOne(ctx, bson.M{"_id": id})
-	resp.Decode(&hotel)
+	if err := h.hotelCollection.FindOne(ctx, bson.M{"_id": id}).Decode(&hotel); err != nil {
+		return nil, err
+	}
 	return hotel, nil
 }

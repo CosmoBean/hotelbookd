@@ -49,6 +49,7 @@ func Init() {
 
 	//hotelAPI
 	apiV1.Get("/hotels", hotelHandler.HandleGetHotels)
+	apiV1.Get("/hotels/:id", hotelHandler.HandleGetHotelById)
 	apiV1.Get("/hotels/:id/rooms", hotelHandler.HandleGetHotelRooms)
 
 	err := api.Listen(listenAddr)
